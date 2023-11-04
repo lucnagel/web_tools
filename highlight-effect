@@ -1,0 +1,31 @@
+// Function to wrap each character in a span
+function wrapChars(textElement) {
+  let textNodes = [...textElement.childNodes].filter(n => n.nodeType === Node.TEXT_NODE && n.textContent.trim() !== '');
+  textNodes.forEach(node => {
+    let parent = node.parentNode;
+    let span = document.createElement('span');
+    span.innerHTML = node.textContent.replace(/(.)/g, "<span class='char'>$1</span>");
+    parent.insertBefore(span, node);
+    parent.removeChild(node);
+  });
+}
+
+// Function to apply the highlight effect
+function applyHighlightEffect() {
+  const chars = document.querySelectorAll('.char');
+  chars.forEach(char => {
+    // Randomly apply the highlight class
+    if (Math.random() < 0.1) { // 10% chance to highlight
+      char.classList.add('highlight');
+    } else {
+      char.classList.remove('highlight');
+    }
+  });
+}
+
+// Wrap each character when the document is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const textElements = document.querySelectorAll('#services-text');
+  textElements.forEach(wrapChars);
+  setInterval(applyHighlightEffect, 2000); // Change highlight every 2 seconds
+});
